@@ -1,0 +1,38 @@
+.message{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.messageTop{
+    display: flex;
+}
+.messageText{
+    padding: 10px;
+    border-bottom-left-radius:20px;
+    background-color: gray;
+    color: aliceblue;
+    max-width: 300px;
+
+}
+.messageBottom{
+    font-size: 12px;
+    margin-top: 10px;
+}
+.userProfil{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: 20px;
+    border-bottom: 1px solid gray;
+}
+.own{
+    align-items: flex-end;
+}
+.message.own .messageText{
+    padding: 10px;
+    border-bottom-right-radius:20px;
+    background-color: #1877f2;
+    color: aliceblue;
+    max-width: 300px;
+}

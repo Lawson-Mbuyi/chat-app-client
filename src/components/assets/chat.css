@@ -1,0 +1,19 @@
+.chatImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.chatName {
+  font-weight: 500;
+  cursor: pointer;
+  padding: 15px;
+  margin-left: 15px;
+}
+
+.recentChats {
+  padding: 15px;
+  margin: 15px;
+  border-bottom: 1px solid gray;}
