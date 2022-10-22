@@ -30,7 +30,9 @@ function Messenger() {
   const messageScroll = useRef();
 
   useEffect(() => {
-    socket.current = io("http://localhost:5000");
+    socket.current = io("http://localhost:5000", {
+      transports: ["websocket"],
+    });
     socket.current.on("get-message", (data) => {
       setArrivAlMessage({
         senderId: data.senderId,
