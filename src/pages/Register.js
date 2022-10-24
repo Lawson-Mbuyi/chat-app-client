@@ -1,35 +1,21 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { register, reset } from "../features/auth/authSlice";
+import { FaSignInAlt, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 export default function Register() {
-  const [image, setImage] = useState("");
+  const [file, setFile] = useState();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
     password2: "",
+    profilePicture: "",
   });
-  const submitImage=()=>{
-    const profileImage = new FormData();
-    profileImage.append("file",image)
-    profileImage.append("uplod_preset","chat-app")
-    profileImage.append("cloud_name","dgcubzo0z")
-
-    return fetch("https://api.cloudinary/v1_1/dgcubzo0z/image/upload",{
-      method:"post",
-      body:"profileImage",
-    })
-    .then((res)=>res.json())
-    .then((profileImage)=>{
-      console.log(profileImage)
-    }).catch((error)=>{
-        console.log(error);
-      })
-  }
-
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,6 +28,15 @@ export default function Register() {
     if (isSuccess || user) navigate("/");
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  //Setting the form changes
+
+  const handleFileChange = (selectedFile) => {
+    if (selectedFile) {
+      setFile(selectedFile[0]);
+    }
+  };
+
   const TextChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -49,23 +44,64 @@ export default function Register() {
     }));
   };
 
-  const formSubmit = (e) => {
+  const formSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
       toast("passwords do not match");
     } else {
+      const profilData = new FormData();
+      profilData.append("file", file);
+      profilData.append("upload_preset", "chat-app");
+
+      const response = await axios({
+        method: "post",
+        url: "https://api.cloudinary.com/v1_1/esaie/image/upload",
+        data: profilData,
+      });
+      const profilUrl = response.data["secure_url"];
       const userData = {
         username,
         email,
         password,
+        profilePicture: profilUrl,
       };
       dispatch(register(userData));
       navigate("/messenger");
     }
   };
-  console.log();
   return (
     <>
+      <header className="header">
+        <div className="logo">
+          <Link to="/">Digital-connect</Link>
+        </div>
+        <ul>
+          {user ? (
+            <li>
+              <button className="logout">
+                <FaSignOutAlt />
+                Logout
+              </button>
+            </li>
+          ) : (
+            <>
+              {" "}
+              <li>
+                <Link to="/login">
+                  <FaSignInAlt />
+                  Sign in
+                </Link>
+              </li>
+              <li>
+                <Link to="/register">
+                  <FaUser />
+                  Sign up
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
+      </header>
       <section className="heading">
         <p>please create an acount</p>
       </section>
@@ -113,6 +149,17 @@ export default function Register() {
               value={password2}
               placeholder="Confirm your password"
               onChange={TextChange}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="file"
+              id="file"
+              className="form-control"
+              name="file"
+              accept="image/*"
+              placeholder="upload your profile"
+              onChange={(e) => handleFileChange(e.target.files)}
             />
           </div>
           <div className="form-group">

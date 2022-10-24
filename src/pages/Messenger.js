@@ -19,7 +19,6 @@ function Messenger() {
   const [users, setUsers] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const [chats, setChats] = useState([]);
-  // const [socket, setSocket] = useState(null);
   const [currentChat, setCurrentChat] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState(null);
@@ -41,6 +40,7 @@ function Messenger() {
       });
     });
   }, []);
+  console.log(user.profilePicture);
   useEffect(() => {
     ArrivAlMessage &&
       currentChat?.chaters.includes(ArrivAlMessage.senderId) &&
@@ -49,25 +49,8 @@ function Messenger() {
   useEffect(() => {
     socket.current.emit("add-user", user._id);
     socket.current.on("get-users", (users) => {
-      console.log(users);
     });
   }, [user]);
-
-  // useEffect(() => {
-  //   socket.current = io("ws://localhost:8000");
-  //   socket.current.on("getMessage", (data) => {
-  //     setArrivAlMessage({
-  //       senderId: data.senderId,
-  //       messageText: data.text,
-  //       createdAt: Date.now(),
-  //     });
-  //   });
-  // }, []);
-  // useEffect(() => {
-  //   ArrivAlMessage &&
-  //     currentChat?.chaters.includes(ArrivAlMessage.senderId) &&
-  //     setMessages((prev) => [...prev, ArrivAlMessage]);
-  // }, [ArrivAlMessage, currentChat]);
 
   useEffect(() => {
     newMessageArray &&
@@ -139,7 +122,7 @@ function Messenger() {
   return (
     <div className="messenger">
       <div className="sideBar">
-        <img src={profil} alt="" className="profil" />
+        <img src={user.profilePicture? user.profilePicture : profil} alt="" className="profil" />
 
         <p
           onClick={getUsers}
@@ -176,7 +159,9 @@ function Messenger() {
       <div className="chatMenu">
         {!users ? <p>Rencent</p> : <p>User list</p>}
         {users
-          ? users.map((user) => <Users user={user} />)
+          ? users.map((user) => (
+              <Users user={user} onClick={() => setCurrentChat(user)} />
+            ))
           : chats.map((c) => (
               <div onClick={() => setCurrentChat(c)}>
                 <Chat chat={c} currentUser={user} />

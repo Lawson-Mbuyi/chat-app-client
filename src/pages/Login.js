@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
+import { FaSignInAlt, FaUser, FaSignOutAlt } from "react-icons/fa";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -38,6 +39,37 @@ export default function Login() {
   };
   return (
     <>
+      <header className="header">
+        <div className="logo">
+          <Link to="/">Digital-connect</Link>
+        </div>
+        <ul>
+          {user ? (
+            <li>
+              <button className="logout">
+                <FaSignOutAlt />
+                Logout
+              </button>
+            </li>
+          ) : (
+            <>
+              {" "}
+              <li>
+                <Link to="/login">
+                  <FaSignInAlt />
+                  Sign in
+                </Link>
+              </li>
+              <li>
+                <Link to="/register">
+                  <FaUser />
+                  Sign up
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
+      </header>
       <section className="heading">
         <p>Login and start the joke</p>
       </section>
