@@ -5,7 +5,7 @@ export default function users({user}) {
       <div className="recent">
         <img
           className="chatImg"
-          src={user.coverPicture }
+          src={user.coverPicture ?user.coverPicture :"" }
           alt="profil"
         />
         <span className="chatName">{user.username }</span>

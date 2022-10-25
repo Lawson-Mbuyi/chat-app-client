@@ -123,14 +123,19 @@ function Messenger() {
       console.log(error);
     }
   };
+  const getCurrentUserChat = async (userTochatId) => {
+    const { receiverId } = await userTochatId;
+    try {
+      const response = await axios.get("/api/chats/:senderId/:receiverId", user.id, receiverId);
+      console.log(response.data);
+    } catch (error) {
+      reset.status(402).json({ message: "No chat till now" });
+    }
+  };
   return (
     <div className="messenger">
       <div className="sideBar">
-        <img
-          src={user.profilePicture ? user.profilePicture : profil}
-          alt=""
-          className="profil"
-        />
+        <img src={user.profilePicture ? user.profilePicture : profil} alt="" className="profil" />
 
         <p
           onClick={getUsers}
@@ -168,7 +173,9 @@ function Messenger() {
         {!users ? <p>Rencent</p> : <p>User list</p>}
         {users
           ? users.map((user) => (
-              <Users user={user} onClick={() => setCurrentChat(user)} />
+              <p onClick={getCurrentUserChat(user._id)}>
+                <Users user={user} />
+              </p>
             ))
           : chats.map((c) => (
               // eslint-disable-next-line jsx-a11y/no-static-element-interactions
