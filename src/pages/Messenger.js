@@ -1,16 +1,20 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable no-unused-expressions */
 import "./assets/messenger.css";
 import { BiSend } from "react-icons/bi";
 import { BsBoxArrowLeft } from "react-icons/bs";
 import { FaRegCommentDots } from "react-icons/fa";
-import { logout, reset } from "../features/auth/authSlice";
 import { useEffect, useRef, useState } from "react";
-import Chat from "../components/Chat";
-import Message from "../components/Message";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { logout, reset } from "../features/auth/authSlice";
+import Chat from "../components/Chat";
+import Message from "../components/Message";
 import profil from "../images/profil.png";
 import Users from "./Users";
-import axios from "axios";
+
 const { io } = require("socket.io-client");
 
 function Messenger() {
@@ -40,16 +44,16 @@ function Messenger() {
       });
     });
   }, []);
-  console.log(user.profilePicture);
   useEffect(() => {
+    // eslint-disable-next-line no-unused-expressions
     ArrivAlMessage &&
       currentChat?.chaters.includes(ArrivAlMessage.senderId) &&
       setMessages((prev) => [...prev, ArrivAlMessage]);
   }, [ArrivAlMessage, currentChat]);
   useEffect(() => {
     socket.current.emit("add-user", user._id);
-    socket.current.on("get-users", (users) => {
-    });
+    // eslint-disable-next-line no-unused-vars
+    socket.current.on("get-users", (users) => {});
   }, [user]);
 
   useEffect(() => {
@@ -61,7 +65,7 @@ function Messenger() {
   useEffect(() => {
     const getUserChats = async () => {
       try {
-        const response = await axios.get("/api/chats/" + user._id);
+        const response = await axios.get(`/api/chats/" ${user._id}`);
         setChats(response.data);
       } catch (error) {
         console.log(error);
@@ -72,7 +76,7 @@ function Messenger() {
   useEffect(() => {
     const getMessages = async () => {
       try {
-        const response = await axios.get("/api/messages/" + currentChat?._id);
+        const response = await axios.get(`/api/messages/${currentChat?._id}`);
         setMessages(response.data);
       } catch (error) {
         console.log(error);
@@ -122,7 +126,11 @@ function Messenger() {
   return (
     <div className="messenger">
       <div className="sideBar">
-        <img src={user.profilePicture? user.profilePicture : profil} alt="" className="profil" />
+        <img
+          src={user.profilePicture ? user.profilePicture : profil}
+          alt=""
+          className="profil"
+        />
 
         <p
           onClick={getUsers}
@@ -163,6 +171,7 @@ function Messenger() {
               <Users user={user} onClick={() => setCurrentChat(user)} />
             ))
           : chats.map((c) => (
+              // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <div onClick={() => setCurrentChat(c)}>
                 <Chat chat={c} currentUser={user} />
               </div>

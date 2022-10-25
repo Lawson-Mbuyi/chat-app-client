@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login, reset } from "../features/auth/authSlice";
 import { FaSignInAlt, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { login, reset } from "../features/auth/authSlice";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -105,7 +105,7 @@ export default function Login() {
           </div>
         </form>
         <p>
-          dont' you have an account?
+          don&apos;t you have an account?
           <span>
             <Link to="/register">Sign up</Link>
           </span>

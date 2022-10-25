@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { register, reset } from "../features/auth/authSlice";
 import { FaSignInAlt, FaUser, FaSignOutAlt } from "react-icons/fa";
+import { register, reset } from "../features/auth/authSlice";
 
 export default function Register() {
   const [file, setFile] = useState();
@@ -29,7 +29,7 @@ export default function Register() {
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
-  //Setting the form changes
+  // Setting the form changes
 
   const handleFileChange = (selectedFile) => {
     if (selectedFile) {
@@ -58,7 +58,7 @@ export default function Register() {
         url: "https://api.cloudinary.com/v1_1/esaie/image/upload",
         data: profilData,
       });
-      const profilUrl = response.data["secure_url"];
+      const profilUrl = response.data.secure_url;
       const userData = {
         username,
         email,
