@@ -13,19 +13,21 @@ import { logout, reset } from "../features/auth/authSlice";
 import Chat from "../components/Chat";
 import Message from "../components/Message";
 import profil from "../images/profil.png";
-import Users from "./Users";
 
 const { io } = require("socket.io-client");
 
 function Messenger() {
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [users, setUsers] = useState(null);
-  const { user } = useSelector((state) => state.auth);
   const [chats, setChats] = useState([]);
+  // const [currentCorrespondantChats, setCurrentCorrespondantChats] = useState(null);
+
   const [currentChat, setCurrentChat] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState(null);
+  // const [correspondantMessages, setCorrespondantMessages] = useState(null);
+
   const [ArrivAlMessage, setArrivAlMessage] = useState(null);
 
   const [newMessageArray, setnewMessageArray] = useState(null);
@@ -115,30 +117,42 @@ function Messenger() {
     dispatch(reset());
     navigate("/");
   };
-  const getUsers = async () => {
-    try {
-      const response = await axios.get("api/users");
-      setUsers(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getCurrentUserChat = async (userTochatId) => {
-    const { receiverId } = await userTochatId;
-    try {
-      const response = await axios.get("/api/chats/:senderId/:receiverId", user.id, receiverId);
-      console.log(response.data);
-    } catch (error) {
-      reset.status(402).json({ message: "No chat till now" });
-    }
-  };
+  // const getUsers = async () => {
+  //   try {
+  //     const response = await axios.get("api/users");
+  //     setUserList(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // const getCorrespondantUserChats = async (senderId, receiverId) => {
+  //   try {
+  //     const response = await axios.get(`/api/chats/${senderId}/${receiverId}`);
+  //     setCurrentCorrespondantChats(response.data.chaters);
+  //   } catch (error) {
+  //     reset.status(402).json({ message: "No chat till now" });
+  //   }
+  // };
+  // useEffect(() => {
+  //   const getCorrespondantMessages = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `/api/messages/${getCorrespondantUserChats?.chaters.receiverId}`,
+  //       );
+  //       setCorrespondantMessages(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getCorrespondantMessages();
+  // }, [getCorrespondantUserChats]);
+  console.log(chats);
   return (
     <div className="messenger">
       <div className="sideBar">
         <img src={user.profilePicture ? user.profilePicture : profil} alt="" className="profil" />
 
         <p
-          onClick={getUsers}
           style={{
             width: "60px",
             color: "#FFFF",
@@ -170,19 +184,12 @@ function Messenger() {
       </div>
       <input placeholder="Search users" className="searchInput" />
       <div className="chatMenu">
-        {!users ? <p>Rencent</p> : <p>User list</p>}
-        {users
-          ? users.map((user) => (
-              <p onClick={getCurrentUserChat(user._id)}>
-                <Users user={user} />
-              </p>
-            ))
-          : chats.map((c) => (
-              // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-              <div onClick={() => setCurrentChat(c)}>
-                <Chat chat={c} currentUser={user} />
-              </div>
-            ))}
+        {chats ? chats.map((c) => (
+          // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+          <div onClick={() => setCurrentChat(c)}>
+            <Chat chat={c} currentUser={user} />
+          </div>
+        )):""}
       </div>
       <div className="chatBox ">
         <div className="chatBoxWrapper">
@@ -194,6 +201,13 @@ function Messenger() {
                 <p>Online</p>
               </p>
             </div>
+            {/* {currentCorrespondantChats
+              ? correspondantMessages.map((corrMessage) => (
+                  <div ref={messageScroll}>
+                    <Message message={corrMessage} own={corrMessage.senderId === user._id} />
+                  </div>
+                ))
+              : ""} */}
             {currentChat
               ? messages.map((m) => (
                   <div ref={messageScroll}>
