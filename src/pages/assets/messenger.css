@@ -9,13 +9,15 @@
 .chatMenu {
   position: relative;
   width: 30%;
-  height: auto;
+  height: 100vh;
   flex-direction: column;
   margin: 45px;
   padding: 15px;
   border: none;
   border-radius: 16px;
   background-color: #ffffff;
+  overflow-y: scroll;
+
 }
 .chatBox {
   width: 600px;
@@ -42,11 +44,6 @@
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
-}
-.chatMenuWrapper,
-.chatBoxWrapper,
-.chatOnlineWrapper {
-  padding: 10px;
 }
 .chatMenuInput {
   padding: 10px;

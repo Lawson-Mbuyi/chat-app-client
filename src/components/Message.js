@@ -5,7 +5,6 @@ import ReactTimeAgo from "react-time-ago";
 
 TimeAgo.addDefaultLocale(en);
 export default function Message({ message, own }) {
-  console.log(message);
   return (
     <div className={own ? "message own" : "message"}>
       <div className="messageTop">

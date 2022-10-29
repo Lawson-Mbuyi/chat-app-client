@@ -1,15 +1,14 @@
+import profil from "../images/profil.png";
 
-export default function users({user}) {
+export default function users({ currentUser}) {
   return (
     <div className="recentChats">
-      <div className="recent">
         <img
           className="chatImg"
-          src={user.coverPicture ?user.coverPicture :"" }
+          src={currentUser.profilePicture ? currentUser.profilePicture : profil}
           alt="profil"
         />
-        <span className="chatName">{user.username }</span>
+        <span className="chatName">{currentUser.username}</span>
       </div>
-    </div>
   );
 }
