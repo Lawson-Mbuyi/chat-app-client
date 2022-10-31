@@ -9,8 +9,8 @@ export default function Chat({ chat, me }) {
   const getCorrespondantUser = async () => {
     const myCorrespondantId = chat.chaters.find((userId) => userId !== me._id);
     try {
-      const myCorrespondant = await axios.get(`/api/users/${myCorrespondantId}`);
-      setCorrespondant(myCorrespondant);
+      const { data } = await axios.get(`/api/users/${myCorrespondantId}`);
+      setCorrespondant(data);
     } catch (error) {
       console.log({ error: "This user doesn't exists" });
     }
@@ -21,10 +21,18 @@ export default function Chat({ chat, me }) {
   }, [chat, me]);
   return (
     <div className="recentChats">
-      <div className="recent">
-        <img className="chatImg" src={correspondant ? correspondant.data.profilePicture : profil} alt="profil" />
-        <span className="chatName">{correspondant ? correspondant.data.username : ""}</span>
-      </div>
+      {correspondant ? (
+        <div className="recent">
+          <img
+            className="chatImg"
+            src={correspondant.profilePicture ? correspondant.profilePicture : profil}
+            alt="profil"
+          />
+          <span className="chatName">{correspondant ? correspondant.username : ""}</span>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

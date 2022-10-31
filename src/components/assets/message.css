@@ -3,6 +3,7 @@
   flex-direction: column;
   margin: 20px;
 }
+
 .messageScroll {
   height: 100%;
   overflow-y: scroll;
@@ -40,3 +41,12 @@
   color: aliceblue;
   max-width: 300px;
 }
+/* .messageBlock {
+  background-color: linear-gradient(to right, #159957, #155799);
+  display: flex;
+  justify-content: center;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+} */

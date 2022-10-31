@@ -6,6 +6,7 @@ import ReactTimeAgo from "react-time-ago";
 TimeAgo.addDefaultLocale(en);
 export default function Message({ message, own }) {
   return (
+    <div className="messageBlock">
     <div className={own ? "message own" : "message"}>
       <div className="messageTop">
         <p className="messageText">{message.messageText}</p>
@@ -13,6 +14,7 @@ export default function Message({ message, own }) {
       <div className="messageBottom">
         <ReactTimeAgo date={message.createdAt} locale="en-US" />
       </div>
+    </div>
     </div>
   );
 }

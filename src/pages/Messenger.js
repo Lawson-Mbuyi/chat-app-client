@@ -21,12 +21,12 @@ function Messenger() {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [chats, setChats] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [users, setUsers] = useState(null);
   const [usersVisibity, setUsersVisibility] = useState(false);
-
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState(null);
   const [ArrivAlMessage, setArrivAlMessage] = useState(null);
@@ -88,8 +88,8 @@ function Messenger() {
     const getCurrentUser = async () => {
       const currentUserId = currentChat.chaters.find((userId) => userId !== user._id);
       try {
-        const currentUser = await axios.get(`/api/users/${currentUserId}`);
-        setCurrentUser(currentUser.data);
+        const { data } = await axios.get(`/api/users/${currentUserId}`);
+        setCurrentUser(data);
       } catch (error) {
         console.log({ error: "Cet utilisateur n'existe pas" });
       }
@@ -160,7 +160,6 @@ function Messenger() {
       console.log({ error: "An error occured" });
     }
   };
-  console.log(messages);
 
   return (
     <div className="messenger">
@@ -229,7 +228,11 @@ function Messenger() {
         <div className="chatBoxWrapper">
           {currentUser ? (
             <div className="userProfil">
-              <img src={currentUser.profilePicture} alt="profil" className="messageImg" />
+              <img
+                src={currentUser.profilePicture ? currentUser.profilePicture : profil}
+                alt="profil"
+                className="messageImg"
+              />
               <p className="userName">
                 {currentUser.username}
                 <p>Online</p>
