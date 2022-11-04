@@ -17,7 +17,6 @@
   border-radius: 16px;
   background-color: #ffffff;
   overflow-y: scroll;
-
 }
 .chatBox {
   width: 600px;
@@ -67,6 +66,7 @@
   border-bottom: 1px solid gray;
 }
 .chatBoxBottom {
+  position: relative;
   display: flex;
   justify-content: flex-end;
 }
@@ -76,7 +76,6 @@
   border: none;
   margin: 15px;
   border-radius: 10px;
-  background-color: #eaeaea;
   padding: 12px;
 }
 .chatBoxWrapper {
@@ -110,4 +109,17 @@
   padding: 15px;
   margin: 15px;
   border-bottom: 1px solid gray;
+}
+.react-input-emoji--button {
+ position: absolute;
+ right: 10%;
+ z-index: 1;
+}
+.camera{
+  position: absolute;
+  top: 35%;
+  right: 30%;
+  z-index: 1;
+  cursor: pointer;
+
 }

@@ -3,12 +3,14 @@
 /* eslint-disable no-unused-expressions */
 import "./assets/messenger.css";
 import { BiSend } from "react-icons/bi";
-import { BsBoxArrowLeft } from "react-icons/bs";
+import { BsBoxArrowLeft, BsCamera } from "react-icons/bs";
 import { FaRegCommentDots } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import InputEmoji from "react-input-emoji";
+import { toast } from "react-toastify";
 import { logout, reset } from "../features/auth/authSlice";
 import Chat from "../components/Chat";
 import Message from "../components/Message";
@@ -33,6 +35,9 @@ function Messenger() {
 
   const [newMessageArray, setnewMessageArray] = useState(null);
   const socket = useRef();
+  const [image, setImage] = useState();
+  const [preview, setPreview] = useState();
+  const fileInputRef = useRef();
   const messageScroll = useRef();
 
   useEffect(() => {
@@ -100,16 +105,29 @@ function Messenger() {
 
   const sendMessage = async (e) => {
     e.preventDefault();
+    if (!currentUser) toast("Please choose your correspondant");
+    const uploadData = new FormData();
+    uploadData.append("file", image);
+    uploadData.append("upload_preset", "chat-app");
+
+    const response = await axios({
+      method: "post",
+      url: "https://api.cloudinary.com/v1_1/esaie/image/upload",
+      data: uploadData,
+    });
+    const fileUrl = response.data.secure_url;
     const message = {
       senderId: user._id,
       messageText: newMessage,
       chatId: currentChat._id,
+      secureUrl: fileUrl || "",
     };
     // const receiverId = currentChat.chaters.find((user) => user !== user._id);
     socket.current.emit("send-message", {
       senderId: user._id,
       receiverId: currentUser._id,
       messageText: newMessage,
+      secureUrl: fileUrl || "",
     });
 
     try {
@@ -119,6 +137,9 @@ function Messenger() {
     } catch (error) {
       console.log(error);
     }
+    fileInputRef.current.value = "";
+    setPreview(null);
+    setImage(null);
   };
   useEffect(() => {
     messageScroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -160,7 +181,17 @@ function Messenger() {
       console.log({ error: "An error occured" });
     }
   };
-
+  useEffect(() => {
+    if (image) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(image);
+    } else {
+      setPreview(null);
+    }
+  }, [image]);
   return (
     <div className="messenger">
       <div className="sideBar">
@@ -255,17 +286,52 @@ function Messenger() {
                 ))
               : ""}
           </div>
+          {preview ? (
+            <img
+              src={preview}
+              style={{
+                objectFit: "cover",
+                width: "150px",
+                height: "150px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              alt=""
+            />
+          ) : (
+            ""
+          )}
 
           <div className="chatBoxBottom">
-            <textarea
-              className="chatMessage"
-              placeholder="write message"
-              onChange={(e) => setNewMessage(e.target.value)}
-              value={newMessage}
-            ></textarea>
-            <button className="btnSend" onClick={sendMessage}>
+            <InputEmoji value={newMessage} onChange={setNewMessage} cleanOnEnter />
+            <div className="camera">
+              <BsCamera
+                onClick={(event) => {
+                  event.preventDefault();
+                  fileInputRef.current.click();
+                }}
+              />
+            </div>
+
+            <input
+              type="file"
+              style={{ display: "none" }}
+              name="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files[0];
+                if (file) {
+                  setImage(file);
+                } else {
+                  setImage(null);
+                }
+              }}
+            />
+
+            <div role="button" tabIndex="0" className="btnSend" onClick={sendMessage}>
               <BiSend />
-            </button>
+            </div>
           </div>
         </div>
       </div>
