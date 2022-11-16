@@ -12,13 +12,16 @@
 
 .messageTop {
   display: flex;
+  flex-direction: column;
+  padding: 15px;
 }
 .messageText {
+  width: 100px;
+  max-width: 200px;
   padding: 10px;
+  background-color: rgb(184, 177, 177);
   border-bottom-left-radius: 20px;
-  background-color: gray;
-  color: aliceblue;
-  max-width: 300px;
+  color: rgb(16,24,33);
 }
 .messageBottom {
   font-size: 12px;
@@ -39,14 +42,5 @@
   border-bottom-right-radius: 20px;
   background-color: #1877f2;
   color: aliceblue;
-  max-width: 300px;
+  max-width: 200px;
 }
-/* .messageBlock {
-  background-color: linear-gradient(to right, #159957, #155799);
-  display: flex;
-  justify-content: center;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-} */

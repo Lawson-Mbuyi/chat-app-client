@@ -9,21 +9,18 @@ export default function Message({ message, own }) {
     <div className="messageBlock">
       <div className={own ? "message own" : "message"}>
         <div className="messageTop">
-          <p className="messageText">{message.messageText}</p>
+          {message.messageText ? <p className="messageText">{message.messageText}</p> : ""}
           {message.secureUrl ? (
-            <p>
-              <img
-                src={message.secureUrl}
-                style={{
-                  objectFit: "cover",
-                  width: "50px",
-                  height: "50px",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-                alt=""
-              />
-            </p>
+            <img
+              src={message.secureUrl}
+              style={{
+                objectFit: "cover",
+                width: "50px",
+                height: "50px",
+                margin: "15px",
+              }}
+              alt=""
+            />
           ) : (
             ""
           )}

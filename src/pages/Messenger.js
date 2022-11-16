@@ -48,6 +48,7 @@ function Messenger() {
       setArrivAlMessage({
         senderId: data.senderId,
         messageText: data.messageText,
+        secureUrl: data.secureUrl,
         createdAt: Date.now(),
       });
     });
@@ -102,31 +103,32 @@ function Messenger() {
     getMessages();
     getCurrentUser();
   }, [currentChat]);
-
+  const uploadData = new FormData();
+  uploadData.append("file", image);
+  uploadData.append("upload_preset", "chat-app");
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!currentUser) toast("Please choose your correspondant");
-    const uploadData = new FormData();
-    uploadData.append("file", image);
-    uploadData.append("upload_preset", "chat-app");
+    let fileUrl = "";
 
-    const response = await axios({
-      method: "post",
-      url: "https://api.cloudinary.com/v1_1/esaie/image/upload",
-      data: uploadData,
-    });
-    const fileUrl = response.data.secure_url;
+    if (image) {
+      const response = await axios({
+        method: "post",
+        url: "https://api.cloudinary.com/v1_1/esaie/image/upload",
+        data: uploadData,
+      });
+      fileUrl = response.data.secure_url;
+    }
     const message = {
       senderId: user._id,
-      messageText: newMessage,
+      messageText: newMessage || "",
       chatId: currentChat._id,
       secureUrl: fileUrl || "",
     };
-    // const receiverId = currentChat.chaters.find((user) => user !== user._id);
     socket.current.emit("send-message", {
       senderId: user._id,
       receiverId: currentUser._id,
-      messageText: newMessage,
+      messageText: newMessage || "",
       secureUrl: fileUrl || "",
     });
 
