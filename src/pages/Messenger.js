@@ -7,7 +7,6 @@ import { BsBoxArrowLeft, BsCamera } from "react-icons/bs";
 import { FaRegCommentDots } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import InputEmoji from "react-input-emoji";
 import { toast } from "react-toastify";
@@ -21,7 +20,6 @@ const { io } = require("socket.io-client");
 
 function Messenger() {
   const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [chats, setChats] = useState([]);
@@ -106,8 +104,7 @@ function Messenger() {
   const uploadData = new FormData();
   uploadData.append("file", image);
   uploadData.append("upload_preset", "chat-app");
-  const sendMessage = async (e) => {
-    e.preventDefault();
+  const sendMessage = async () => {
     if (!currentUser) toast("Please choose your correspondant");
     let fileUrl = "";
 
@@ -149,7 +146,6 @@ function Messenger() {
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
-    navigate("/");
   };
   const getUsers = async () => {
     try {
@@ -194,6 +190,11 @@ function Messenger() {
       setPreview(null);
     }
   }, [image]);
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13) {
+      sendMessage();
+    }
+  };
   return (
     <div className="messenger">
       <div className="sideBar">
@@ -288,6 +289,7 @@ function Messenger() {
                 ))
               : ""}
           </div>
+          <div className="divider"></div>
           {preview ? (
             <img
               src={preview}
@@ -305,7 +307,13 @@ function Messenger() {
           )}
 
           <div className="chatBoxBottom">
-            <InputEmoji value={newMessage} onChange={setNewMessage} cleanOnEnter />
+            <form></form>
+            <InputEmoji
+              value={newMessage}
+              onChange={setNewMessage}
+              onKeyDown={onKeyDown}
+              cleanOnEnter
+            />
             <div className="camera">
               <BsCamera
                 onClick={(event) => {
@@ -331,7 +339,7 @@ function Messenger() {
               }}
             />
 
-            <div role="button" tabIndex="0" className="btnSend" onClick={sendMessage}>
+            <div role="button" tabIndex="0" className="btnSend" onClick={sendMessage} onKeyPress>
               <BiSend />
             </div>
           </div>

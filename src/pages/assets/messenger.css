@@ -1,10 +1,12 @@
 .messenger {
-  height: 100%;
-  width: 100vw;
-  margin: auto;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 99vh;
+  width: 90%;
   display: flex;
   background-color: #eaeaea;
-  padding: 15px;
 }
 .chatMenu {
   position: relative;
@@ -16,7 +18,7 @@
   border: none;
   border-radius: 16px;
   background-color: #ffffff;
-  overflow-y: scroll;
+  overflow-y:overlay;
 }
 .chatBox {
   width: 600px;
@@ -38,8 +40,8 @@
   position: absolute;
   top: 10px;
   left: 30%;
-  width: 62px;
-  height: 62px;
+  width: 82px;
+  height: 82px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
@@ -58,12 +60,12 @@
   padding: 10px;
 }
 .messageImg {
-  width: 32px;
-  height: 32px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 10px;
-  border-bottom: 1px solid gray;
+  margin-right: 20%;
+  cursor: pointer;
 }
 .chatBoxBottom {
   position: relative;
@@ -87,8 +89,13 @@
 }
 .chatBoxTop {
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: overlay;
   padding-right: 15px;
+}
+.divider {
+  width: 90%;
+  margin: auto;
+  border-bottom: 1px solid gray;
 }
 .btnSend {
   width: 40px;
@@ -105,21 +112,16 @@
   position: absolue;
   top: 20px;
 }
-.userProfile {
-  padding: 15px;
-  margin: 15px;
-  border-bottom: 1px solid gray;
-}
+
 .react-input-emoji--button {
- position: absolute;
- right: 10%;
- z-index: 1;
+  position: absolute;
+  right: 10%;
+  z-index: 1;
 }
-.camera{
+.camera {
   position: absolute;
   top: 35%;
   right: 30%;
   z-index: 1;
   cursor: pointer;
-
 }

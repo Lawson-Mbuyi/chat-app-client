@@ -169,7 +169,7 @@ export default function Register() {
           </div>
         </form>
         <p>
-          Do you have an account?
+          Do you have an account?&nbsp;&nbsp;
           <span>
             <Link to="/login">Sign in</Link>
           </span>
